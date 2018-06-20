@@ -1,3 +1,7 @@
+# Configuration files
+config.yaml
+
+# Swagger code-gen jar
 *.jar
 
 # Byte-compiled / optimized / DLL files
