@@ -17,7 +17,7 @@ def get_concepts(keywords, categories=None, size=None):
     size = size if size is not None and size > 0 else 100
     categories = categoreis if categories is not None else []
 
-    import pudb; pu.db
+    # import pudb; pu.db
 
     q = """
         MATCH (n)

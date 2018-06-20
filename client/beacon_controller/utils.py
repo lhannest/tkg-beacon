@@ -4,7 +4,7 @@ __sample_name = 'config.sample.yaml'
 
 __config_dict = None
 
-def load_config():
+def load_config(silent=True):
     """
     Walks backwards from __file__ to find config.yaml, loads and returns as a
     dictionary.
@@ -25,6 +25,9 @@ def load_config():
     while config is None:
         d = os.path.dirname(f)
         path = os.path.join(d, 'config.yaml')
+
+        if not silent:
+            print('Searching for config.yaml in:', path)
 
         if os.path.isfile(path):
             config = path
