@@ -224,6 +224,8 @@ paths:
                         Human readable name of a 'maximal' Biolink Model or
                         beacon-specific (or Reasoner-specific) predicate
                         relationship name.
+                    negated:
+                      type: boolean
                 object:
                   title: BeaconKnowledgeMapObject
                   type: object

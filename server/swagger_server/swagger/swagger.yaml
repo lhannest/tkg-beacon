@@ -453,6 +453,8 @@ definitions:
         type: "string"
         description: "Human readable name of a 'maximal' Biolink Model or beacon-specific\
           \ (or Reasoner-specific) predicate relationship name.\n"
+      negated:
+        type: "boolean"
   BeaconStatementCitation:
     properties:
       id:
