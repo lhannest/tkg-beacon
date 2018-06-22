@@ -43,3 +43,28 @@ def load_config(silent=True):
     __config_dict = yaml.safe_load(open(config).read())
 
     return __config_dict
+
+def make_case_insensitive_and_inexact(strings):
+    """
+    Adds additional regex modifiers to make the resulting list of search terms
+    case insensitive (?i) and match any part of the word (.*)
+    """
+    converted = list(map(lambda s: "(?i).*" + s + ".*", strings))
+    return converted;
+
+def make_case_insensitive(strings):
+    """
+    Adds additional regex modifiers to make the resulting list of search terms
+    case insensitive (?i)
+    """
+    converted = list(map(lambda s: "(?i)" + s, strings))
+    return converted;
+
+def remove_string_from_list(string, strings):
+    """
+    Removes first of string in list if it exists and returns list with removed items
+    """
+    if (strings is not None):
+        if string in strings: 
+            strings.remove(string)
+    return strings

@@ -48,4 +48,4 @@ def get_exact_matches_to_concept_list(c):  # noqa: E501
 
     :rtype: List[ExactMatchResponse]
     """
-    return 'do some magic!'
+    return ctrl.get_exact_matches_to_concept_list(c);
