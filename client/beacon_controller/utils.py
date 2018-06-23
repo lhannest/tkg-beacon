@@ -1,8 +1,24 @@
-import os, yaml
+import os, yaml, threading
+
+import beacon_controller as ctrl
 
 __sample_name = 'config.sample.yaml'
 
 __config_dict = None
+
+def start_new_thread(method, args):
+    thread = threading.Thread(target=method, args=args)
+    thread.daemon = True
+    thread.start()
+
+def initiate_metadata_cache():
+    """
+    The metadata methods are very slow, but they automatically cache their
+    results. So we will call them on new threads to initiate the cache.
+    """
+    start_new_thread(ctrl.get_concept_categories, ())
+    start_new_thread(ctrl.get_knowledge_map, ())
+    start_new_thread(ctrl.get_predicates, ())
 
 def load_config(silent=True):
     """
@@ -50,7 +66,7 @@ def make_case_insensitive_and_inexact(strings):
     case insensitive (?i) and match any part of the word (.*)
     """
     converted = list(map(lambda s: "(?i).*" + s + ".*", strings))
-    return converted;
+    return converted
 
 def make_case_insensitive(strings):
     """
@@ -58,13 +74,10 @@ def make_case_insensitive(strings):
     case insensitive (?i)
     """
     converted = list(map(lambda s: "(?i)" + s, strings))
-    return converted;
+    return converted
 
-def remove_string_from_list(string, strings):
+def remove_all(original_list:list, object_to_be_removed):
     """
     Removes first of string in list if it exists and returns list with removed items
     """
-    if (strings is not None):
-        if string in strings: 
-            strings.remove(string)
-    return strings
+    return [i for i in original_list if i != object_to_be_removed]
