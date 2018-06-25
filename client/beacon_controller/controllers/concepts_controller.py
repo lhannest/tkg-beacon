@@ -8,7 +8,7 @@ from beacon_controller.database.model import NodeConceptDetails
 from beacon_controller import utils
 
 import yaml
-import configparser
+import ast
 
 def get_concept_details(conceptId):
     q = """
@@ -22,7 +22,8 @@ def get_concept_details(conceptId):
         n.symbol AS symbol,
         n.description AS description,
         n.synonym AS synonyms,
-        n.clique AS clique
+        n.clique AS clique,
+        n.xrefs AS xrefs
     LIMIT 1
     """
 
@@ -31,18 +32,27 @@ def get_concept_details(conceptId):
     for result in results:
         uri = result['uri'] if result['uri'] != None else result['iri']
         synonyms = result['synonyms'] if result['synonyms'] != None else []
+
         clique = result['clique'] if result['clique'] != None else []
-        clique = utils.remove_all(clique, result['id'])
+        xrefs = result['xrefs'] if result['xrefs'] != None else []
+
+        exact_matches = list(set(clique + xrefs))
+
+        exact_matches = utils.remove_all(exact_matches, result['id'])
+
+        categories = result['category']
+        if not isinstance(categories, (list, set, tuple)):
+            categories = [categories]
 
         return BeaconConceptWithDetails(
             id=result['id'],
             uri=uri,
             name=result['name'],
-            category=result['category'],
+            categories=categories,
             symbol=result['symbol'],
             description=result['description'],
             synonyms=result['synonyms'],
-            exact_matches=clique
+            exact_matches=exact_matches
         )
 
 def get_concepts(keywords, categories=None, size=None):
@@ -66,10 +76,12 @@ def get_concepts(keywords, categories=None, size=None):
     concepts = []
 
     for node in nodes:
+        if all(len(category) == 1 for category in node.category):
+            node.category = [''.join(node.category)]
         concept = BeaconConcept(
             id=node.curie,
             name=node.name,
-            category=node.category,
+            categories=node.category,
             description=node.description
         )
 
@@ -78,20 +90,41 @@ def get_concepts(keywords, categories=None, size=None):
     return concepts
 
 def get_exact_matches_to_concept_list(c):
-
     q = """
-    MATCH (n) WHERE LOWER(n.id)=LOWER({curie})
-    RETURN n
+    MATCH (n) WHERE
+        ANY(id IN {id_list} WHERE TOLOWER(n.id) = TOLOWER(id))
+    RETURN
+        n.id AS id,
+        n.xrefs AS xrefs,
+        n.clique AS clique
     """
 
-    exact_matches = []
-    for curie in c:
-        nodes = db.query(q, NodeConceptDetails, curie=curie)
-        if (len(nodes)>=1):
-            matches = utils.remove_string_from_list(curie, nodes[0].exact_matches)
-            exact_match = ExactMatchResponse(id=curie, within_domain=True, has_exact_matches=matches)
-        else:
-            exact_match = ExactMatchResponse(id=curie, within_domain=False, has_exact_matches=[])
-        exact_matches.append(exact_match)
+    results = db.query(q, id_list=c)
+    exact_match_responses = []
+    for result in results:
+        c.remove(result['id'])
 
-    return exact_matches
+        exact_matches = []
+
+        if isinstance(result['xrefs'], (list, tuple, set)):
+            exact_matches += result['xrefs']
+
+        if isinstance(result['clique'], (list, tuple, set)):
+            exact_matches += result['clique']
+
+        exact_matches = utils.remove_all(exact_matches, result['id'])
+
+        exact_match_responses.append(ExactMatchResponse(
+            id=result['id'],
+            within_domain=True,
+            has_exact_matches=list(set(exact_matches))
+        ))
+
+    for curie_id in c:
+        exact_match_responses.append(ExactMatchResponse(
+            id=curie_id,
+            within_domain=False,
+            has_exact_matches=[]
+        ))
+
+    return exact_match_responses
