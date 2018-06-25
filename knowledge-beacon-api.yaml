@@ -344,8 +344,10 @@ paths:
                   type: string
                   description: |
                     canonical human readable name of the concept
-                category:
-                  type: string
+                categories:
+                  type: array
+                  items:
+                    type: string
                   description: >
                     concept semantic type 'category'. Should be specified from
                     the
@@ -406,8 +408,10 @@ paths:
                 type: string
                 description: |
                   (optional) symbol, used for genomic data
-              category:
-                type: string
+              categories:
+                type: array
+                items:
+                  type: string
                 description: |
                   concept semantic type 'category'. Should be specified from the
                   [Biolink Model](https://biolink.github.io/biolink-model).
@@ -669,8 +673,10 @@ paths:
                     name:
                       type: string
                       description: human readable label of subject concept
-                    category:
-                      type: string
+                    categories:
+                      type: array
+                      items:
+                        type: string
                       description: >
                         a semantic group for the subject concept (specified as a
                         code gene, pathway, disease, etc. - see [Biolink
@@ -716,8 +722,10 @@ paths:
                     name:
                       type: string
                       description: human readable label of object concept
-                    category:
-                      type: string
+                    categories:
+                      type: array
+                      items:
+                        type: string
                       description: >
                         a semantic group for the object concept (specified as a
                         code gene, pathway, disease, etc. - see [Biolink

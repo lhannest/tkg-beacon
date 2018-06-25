@@ -520,10 +520,12 @@ definitions:
       name:
         type: "string"
         description: "canonical human readable name of the concept\n"
-      category:
-        type: "string"
+      categories:
+        type: "array"
         description: "concept semantic type 'category'. Should be specified from the\n\
           [Biolink Model](https://biolink.github.io/biolink-model).\n"
+        items:
+          type: "string"
       description:
         type: "string"
         description: "(optional) narrative concept definition\n"
@@ -599,11 +601,13 @@ definitions:
       name:
         type: "string"
         description: "human readable label of subject concept"
-      category:
-        type: "string"
+      categories:
+        type: "array"
         description: "a semantic group for the subject concept (specified as a code\
           \ gene, pathway, disease, etc. - see [Biolink Model](https://biolink.github.io/biolink-model)\
           \ for the full list of categories)\n"
+        items:
+          type: "string"
   BeaconConceptCategory:
     properties:
       id:
@@ -706,10 +710,12 @@ definitions:
       symbol:
         type: "string"
         description: "(optional) symbol, used for genomic data\n"
-      category:
-        type: "string"
+      categories:
+        type: "array"
         description: "concept semantic type 'category'. Should be specified from the\n\
           [Biolink Model](https://biolink.github.io/biolink-model).\n"
+        items:
+          type: "string"
       description:
         type: "string"
         description: "(optional) narrative concept definition\n"
@@ -747,8 +753,10 @@ definitions:
       name:
         type: "string"
         description: "human readable label of object concept"
-      category:
-        type: "string"
+      categories:
+        type: "array"
         description: "a semantic group for the object concept (specified as a code\
           \ gene, pathway, disease, etc. - see [Biolink Model](https://biolink.github.io/biolink-model)\
           \ for the full list of categories)\n"
+        items:
+          type: "string"
