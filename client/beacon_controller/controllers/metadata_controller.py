@@ -21,49 +21,27 @@ def camel_case(s:str) -> str:
 
 @ttl_cache(ttl=__time_to_live_in_seconds)
 def get_concept_categories():
-    """
-    We were originally using:
-
-        q = 'MATCH (x) RETURN DISTINCT x.category AS category, COUNT(*) AS frequency;'
-
-    But this caused trouble, as sometimes the category property is a list, as
-    often times a node will have multiple categories. We want the count for each
-    individual category, not counts for each subset of the categories. The query
-    we are now using is significantly slower, but gives better results. Since we
-    are memoizing this method, it will be slow only for the first time it's called.
-
-    The ANY cypher method appears to coerce a string into a list of one string,
-    so that:
-        ANY(x IN "gene" WHERE x = "gene")
-    behaves the same as:
-        ANY(x IN ["gene"] WHERE x = "gene")
-    """
-
-    q = """
-    MATCH (n) WITH DISTINCT n.category AS categories
-    UNWIND categories AS category
-    MATCH (n) WHERE ANY(x IN n.category WHERE x = category)
-    RETURN category AS category, COUNT(*) AS frequency;
-    """
-
+    q = 'MATCH (x) RETURN DISTINCT x.category AS category, COUNT(*) AS frequency;'
     results = db.query(q)
 
-    results = sorted(results, key=lambda k: k['frequency'], reverse=True)
-
-    categories = []
-
+    category_dict = {}
     for result in results:
-        category = result['category']
-
-        if isinstance(category, list):
-            continue
-
+        categories = utils.standardize(result['category'])
+        for c in categories:
+            if c in category_dict:
+                category_dict[c] += result['frequency']
+            else: 
+                category_dict[c] = result['frequency']
+    
+    categories = []
+    sorted_results = sorted(category_dict.items(), key=lambda k: k[1], reverse=True)
+    for category, frequency in sorted_results:
         uri = 'http://bioentity.io/vocab/{}'.format(camel_case(category))
         identifier = 'BLM:{}'.format(camel_case(category))
         categories.append(BeaconConceptCategory(
             id=identifier,
             uri=uri,
-            frequency=result['frequency'],
+            frequency=frequency,
             category=category
         ))
 
