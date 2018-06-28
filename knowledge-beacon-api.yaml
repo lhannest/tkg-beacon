@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: Translator Knowledge Beacon API
-  version: 1.1.0
+  version: 1.1.1
   contact:
     url: 'http://starinformatics.com'
     email: richard@starinformatics.com
@@ -11,7 +11,6 @@ info:
   license:
     name: MIT License
     url: 'http://opensource.org/licenses/MIT'
-host: rkb.ncats.io
 basePath: /
 schemes:
   - https

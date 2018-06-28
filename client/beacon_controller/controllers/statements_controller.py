@@ -141,11 +141,8 @@ def get_statements(s, edge_label=None, relation=None, t=None, keywords=None, cat
         s = s.properties
         o = o.properties
 
-        if not isinstance(s['category'], (list, tuple, set)):
-            s['category'] = [s['category']]
-
-        if not isinstance(o['category'], (list, tuple, set)):
-            o['category'] = [o['category']]
+        s['category'] = utils.standardize(s['category'])
+        o['category'] = utils.standardize(o['category'])
 
         if result['edge_label'] != None:
             edge_label = result['edge_label']

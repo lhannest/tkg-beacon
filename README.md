@@ -21,7 +21,7 @@ Navigate into the `/server` directory and run:
 python setup.py install
 ```
 
-Then navigate into the `/client` directory and do the same.
+Then navigate into the `/ontology` and `/client` directories and do the same.
 
 Then navigate into the `/server` directory and run the program with:
 ```

@@ -40,9 +40,7 @@ def get_concept_details(conceptId):
 
         exact_matches = utils.remove_all(exact_matches, result['id'])
 
-        categories = result['category']
-        if not isinstance(categories, (list, set, tuple)):
-            categories = [categories]
+        categories = utils.standardize(result['category'])
 
         return BeaconConceptWithDetails(
             id=result['id'],
@@ -78,10 +76,11 @@ def get_concepts(keywords, categories=None, size=None):
     for node in nodes:
         if all(len(category) == 1 for category in node.category):
             node.category = [''.join(node.category)]
+        categories = utils.standardize(node.category)
         concept = BeaconConcept(
             id=node.curie,
             name=node.name,
-            categories=node.category,
+            categories=categories,
             description=node.description
         )
 

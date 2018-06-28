@@ -1,6 +1,8 @@
 import os, yaml, threading
 
 import beacon_controller as ctrl
+from beacon_ontology import getEntityByName
+from beacon_ontology.biolink_class import BiolinkClass
 
 __sample_name = 'config.sample.yaml'
 
@@ -81,3 +83,29 @@ def remove_all(original_list:list, object_to_be_removed):
     Removes first of string in list if it exists and returns list with removed items
     """
     return [i for i in original_list if i != object_to_be_removed]
+
+def removeNonBiolinkCategories(old_categories:list):
+    """
+    Removes all non-Biolink compliant categories and returns the remaining list.
+    If all items are removed, then returns a list containing the default, "named thing"
+    """
+    # categories = list(filter(isBiolinkCategory, old_categories))
+    categories = [c for c in old_categories if isBiolinkCategory(c)]
+    if not categories:
+        #categories is empty
+        categories.append("named thing")
+    
+    return categories
+
+def isBiolinkCategory(c):
+    test = getEntityByName(c)
+    return test != None and isinstance(test, BiolinkClass)
+
+def standardize(categories):
+    """
+    Converts categories into a list if not already, and removes all non-Biolink categories
+    """
+    if not isinstance(categories, (list, set, tuple)):
+        categories = [categories]
+    categories = removeNonBiolinkCategories(categories)
+    return categories
