@@ -18,7 +18,3 @@ class Node(StructuredNode):
     description = StringProperty(db_property='definition')
     symbol = StringProperty()
     edges = RelationshipTo('Node', 'EDGE', model=Edge)
-
-class NodeConceptDetails(Node):
-    synonyms = ArrayProperty(StringProperty(), db_property='synonym')
-    exact_matches = ArrayProperty(StringProperty(), db_property='clique')

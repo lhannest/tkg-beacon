@@ -9,7 +9,6 @@ from cachetools.func import ttl_cache
 
 import beacon_controller.database as db
 from beacon_controller.database import Node
-from beacon_controller.database.model import NodeConceptDetails
 from beacon_controller import utils
 
 from collections import defaultdict
@@ -63,15 +62,16 @@ def eq(d1, d2):
 
 def split_up_categories(results):
     def split_up_by_key(dicts, key):
+        new_dict = []
         for old_dict in dicts:
-            if isinstance(old_dict[key], list):
-                for c in old_dict[key]:
-                    d = dict(old_dict)
-                    d[key] = c
-                    dicts.append(d)
+            for c in utils.standardize(old_dict[key]):
+                d = dict(old_dict)
+                d[key] = c
+                new_dict.append(d)
+        return new_dict
 
-    split_up_by_key(results, 'subject_category')
-    split_up_by_key(results, 'object_category')
+    results = split_up_by_key(results, 'subject_category')
+    return split_up_by_key(results, 'object_category')
 
 def add_up_duplicates(results):
     for a in results:
@@ -96,8 +96,8 @@ def get_knowledge_map():
     """
 
     results = db.query(q)
-    
-    split_up_categories(results)
+
+    results = split_up_categories(results)
     add_up_duplicates(results)
     results = sorted(results, key=lambda k: k['frequency'], reverse=True)
 

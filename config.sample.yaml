@@ -7,3 +7,7 @@ client:
 
 server:
   port: 8080
+
+general:
+  # Setting filter_biolink to True will ignore categories that are non-Biolink category compliant
+  filter_biolink: false

@@ -4,7 +4,6 @@ from swagger_server.models.exact_match_response import ExactMatchResponse
 
 import beacon_controller.database as db
 from beacon_controller.database import Node
-from beacon_controller.database.model import NodeConceptDetails
 from beacon_controller import utils
 
 import yaml

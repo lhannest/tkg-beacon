@@ -107,5 +107,7 @@ def standardize(categories):
     """
     if not isinstance(categories, (list, set, tuple)):
         categories = [categories]
-    categories = removeNonBiolinkCategories(categories)
+    filter_biolink = load_config(silent=False)['general']['filter_biolink']
+    if filter_biolink is True:
+        categories = removeNonBiolinkCategories(categories)
     return categories

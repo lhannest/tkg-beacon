@@ -1,3 +1,6 @@
+## TKG Beacon
+For wrapping Translator Knowledge Graph compliant Neo4j databases
+
 ### Getting started
 Create a fresh virtual environment
 ```
@@ -29,3 +32,9 @@ python -m swagger_server
 ```
 
 The Swagger UI can be found at `{basepath}/ui/`, e.g. `localhost:8080/ui/`
+
+### Configuring the beacon
+Settings should be in `config.yaml`.
+Change the database address (bolt protocol), username, and password to the Neo4j database you would like to wrap.
+
+Setting `filter_biolink` to `True` will ignore all categories that are non-Biolink compliant if a concept has more than one category. If only one category exists for a particular concept, the concept will be reported by the beacon as `"named thing"`.
