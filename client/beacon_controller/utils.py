@@ -103,11 +103,12 @@ def isBiolinkCategory(c):
 
 def standardize(categories):
     """
-    Converts categories into a list if not already, and removes all non-Biolink categories
+    Converts categories into a list if not already
+    Also removes all non-Biolink categories if filter_biolink setting is set to True
     """
     if not isinstance(categories, (list, set, tuple)):
         categories = [categories]
-    filter_biolink = load_config(silent=False)['general']['filter_biolink']
+    filter_biolink = load_config()['general']['filter_biolink']
     if filter_biolink is True:
         categories = removeNonBiolinkCategories(categories)
     return categories

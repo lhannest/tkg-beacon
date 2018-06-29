@@ -103,13 +103,6 @@ def get_knowledge_map():
 
     results = [d for d in results if not isinstance(d['subject_category'], list) and not isinstance(d['object_category'], list)]
 
-    for i, r1 in enumerate(results):
-        for j, r2 in enumerate(results):
-            if r1 is not r2 and equal_dicts(r1, r2, 'frequency'):
-                assert False, 'We should have removed all duplicates already!'
-
-    print(len(results))
-
     maps = []
     for result in results:
         o = BeaconKnowledgeMapObject(
