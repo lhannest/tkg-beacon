@@ -12,10 +12,9 @@ class Edge(StructuredRel):
 
 class Node(StructuredNode):
     curie = StringProperty(required=True, db_property='id')
-    uri = StringProperty()
+    uri = StringProperty(db_property='iri')
     name = StringProperty(required=True)
-    category = StringProperty(required=True)
-    description = StringProperty()
+    category = ArrayProperty(required=True)
+    description = StringProperty(db_property='definition')
     symbol = StringProperty()
-
     edges = RelationshipTo('Node', 'EDGE', model=Edge)

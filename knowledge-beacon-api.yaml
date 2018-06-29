@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: Translator Knowledge Beacon API
-  version: 1.1.0
+  version: 1.1.1
   contact:
     url: 'http://starinformatics.com'
     email: richard@starinformatics.com
@@ -11,7 +11,6 @@ info:
   license:
     name: MIT License
     url: 'http://opensource.org/licenses/MIT'
-host: rkb.ncats.io
 basePath: /
 schemes:
   - https
@@ -224,6 +223,8 @@ paths:
                         Human readable name of a 'maximal' Biolink Model or
                         beacon-specific (or Reasoner-specific) predicate
                         relationship name.
+                    negated:
+                      type: boolean
                 object:
                   title: BeaconKnowledgeMapObject
                   type: object
@@ -342,8 +343,10 @@ paths:
                   type: string
                   description: |
                     canonical human readable name of the concept
-                category:
-                  type: string
+                categories:
+                  type: array
+                  items:
+                    type: string
                   description: >
                     concept semantic type 'category'. Should be specified from
                     the
@@ -404,8 +407,10 @@ paths:
                 type: string
                 description: |
                   (optional) symbol, used for genomic data
-              category:
-                type: string
+              categories:
+                type: array
+                items:
+                  type: string
                 description: |
                   concept semantic type 'category'. Should be specified from the
                   [Biolink Model](https://biolink.github.io/biolink-model).
@@ -667,8 +672,10 @@ paths:
                     name:
                       type: string
                       description: human readable label of subject concept
-                    category:
-                      type: string
+                    categories:
+                      type: array
+                      items:
+                        type: string
                       description: >
                         a semantic group for the subject concept (specified as a
                         code gene, pathway, disease, etc. - see [Biolink
@@ -714,8 +721,10 @@ paths:
                     name:
                       type: string
                       description: human readable label of object concept
-                    category:
-                      type: string
+                    categories:
+                      type: array
+                      items:
+                        type: string
                       description: >
                         a semantic group for the object concept (specified as a
                         code gene, pathway, disease, etc. - see [Biolink
