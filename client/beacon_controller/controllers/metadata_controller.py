@@ -96,7 +96,6 @@ def get_knowledge_map():
     """
 
     results = db.query(q)
-
     results = split_up_categories(results)
     add_up_duplicates(results)
     results = sorted(results, key=lambda k: k['frequency'], reverse=True)

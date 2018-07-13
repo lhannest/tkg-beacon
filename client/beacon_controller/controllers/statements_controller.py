@@ -54,13 +54,7 @@ def get_statement_details(statementId, keywords=None, size=None):
         r = result['relation']
         o = result['object']
 
-        d['subject_labels'] = s.labels
-        d['object_labels'] = o.labels
         d['relationship_type'] = r.type
-
-        s = s.properties
-        o = o.properties
-        r = r.properties
 
         populate_dict(d, s, 'subject')
         populate_dict(d, o, 'object')
@@ -138,11 +132,8 @@ def get_statements(s, edge_label=None, relation=None, t=None, keywords=None, cat
         else:
             o, s = result['source'], result['target']
 
-        s = s.properties
-        o = o.properties
-
-        s['category'] = utils.standardize(s['category'])
-        o['category'] = utils.standardize(o['category'])
+        s_categories = utils.standardize(s['category'])
+        o_categories = utils.standardize(o['category'])
 
         if result['edge_label'] != None:
             edge_label = result['edge_label']
@@ -152,7 +143,7 @@ def get_statements(s, edge_label=None, relation=None, t=None, keywords=None, cat
         beacon_subject = BeaconStatementSubject(
             id=s['id'],
             name=s['name'],
-            categories=s['category']
+            categories=s_categories
         )
 
         beacon_predicate = BeaconStatementPredicate(
@@ -164,7 +155,7 @@ def get_statements(s, edge_label=None, relation=None, t=None, keywords=None, cat
         beacon_object = BeaconStatementObject(
             id=o['id'],
             name=o['name'],
-            categories=o['category']
+            categories=o_categories
         )
 
         statement_id = result['statement_id']
