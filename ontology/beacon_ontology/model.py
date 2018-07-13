@@ -24,9 +24,10 @@ class BiolinkModel(object):
 
         self.classes = []
 
-        for c in classes:
+        for c_name in classes:
+            c = classes.get(c_name)
             b = BiolinkClass(
-                name=c.get('name'),
+                name=c_name,
                 description=c.get('description'),
                 is_a=c.get('is_a'),
                 abstract=c.get('abstract'),
@@ -38,22 +39,25 @@ class BiolinkModel(object):
 
         self.types = []
 
-        for t in types:
-            b = BiolinkType(
-                name=t.get('name'),
-                typeof=t.get('typeof'),
-                description=t.get('description'),
-                mappings=t.get('mappings'),
-                aliases=t.get('aliases')
-            )
+        for t_name in types:
+            t = types.get(t_name)
+            if t is not None:
+                b = BiolinkType(
+                    name=t_name,
+                    typeof=t.get('typeof'),
+                    description=t.get('description'),
+                    mappings=t.get('mappings'),
+                    aliases=t.get('aliases')
+                )
 
             self.types.append(b)
 
         self.slots = []
 
-        for s in slots:
+        for s_name in slots:
+            s = slots.get(s_name)
             b = BiolinkSlot(
-                name=s.get('name'),
+                name=s_name,
                 description=s.get('description'),
                 mappings=s.get('mappings'),
                 is_a=s.get('is_a'),
