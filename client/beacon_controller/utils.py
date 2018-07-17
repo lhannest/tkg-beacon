@@ -114,3 +114,11 @@ def standardize(categories):
     if filter_biolink is True:
         categories = removeNonBiolinkCategories(categories)
     return categories
+
+def stringify(s):
+    """
+    Turns s into a semicolon separated string if s is a list
+    """
+    if isinstance(s, (list, set)):
+        s = "; ".join(s)
+    return s

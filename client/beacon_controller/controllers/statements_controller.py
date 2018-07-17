@@ -76,17 +76,13 @@ def get_statement_details(statementId, keywords=None, size=None):
         for key, value in d.items():
             annotations.append(BeaconStatementAnnotation(
                 tag=key,
-                value=value
+                value=utils.stringify(value)
             ))
-
-        for a in annotations:
-            if isinstance(a.value, set):
-                a.value = list(a.value)
 
         return BeaconStatementWithDetails(
             id=statementId,
-            is_defined_by=r.get('is_defined_by', None),
-            provided_by=r.get('provided_by', None),
+            is_defined_by=utils.stringify(r.get('is_defined_by', None)),
+            provided_by=utils.stringify(r.get('provided_by', None)),
             qualifiers=r.get('qualifiers', None),
             annotation=annotations,
             evidence=evidences
